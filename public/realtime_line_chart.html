@@ -1,0 +1,45 @@
+<head> <!-- Plotly.js load with cdn --> 
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body> 
+    <div id="g1"></div>
+    <div id="g2"></div>
+    <div id="g3"></div>
+    <div id="g4"></div> 
+    <div id="g5"></div> 
+    <div id="g6"></div> 
+    <div id="g7"></div> 
+    <div id="g8"></div> 
+    <div id="g9"></div> 
+    <div id="g10"></div> 
+    <div id="g11"></div> 
+    <div id="g12"></div> 
+    <div id="g13"></div> 
+    <div id="g14"></div> <div id="g15"></div> <div id="g16"></div> <div id="g17"></div> <div id="g18"></div> <div id="g19"></div> <div id="g20"></div> <div id="g21"></div> <div id="g22"></div> <div id="g23"></div> <div id="g24"></div> <div id="g25"></div> <div id="g26"></div> <div id="g27"></div> <div id="g28"></div> <div id="g29"></div> <div id="g30"></div> <div id="g31"></div> 
+    <script type="text/javascript"> // 임의 값을 체유기 위한 함수 
+        function rand() { return Math.random(); } // 실시간 차트 출력 부분 
+        // relayout()으로 화면 x축 갱신 
+        // extendTraces()로 데이터 추가 
+        function showChart(target, update, minuteView) { Plotly.relayout(target, minuteView); Plotly.extendTraces(target, update, [0]) } var time = new Date(); // 데이터와 chart 설정.
+        var data = [{ x: [time], y: [rand], mode: 'lines', line: {color: '#80CAF6'} }]; // 차트를 출력하는 부분 // 총 31개(g1~g31) 출력 
+        for (var i = 0; i < 31; i++) {
+            Plotly.plot('g'+(i+1), data);
+        } 
+        var cnt = 0; 
+        var interval = setInterval(function() {
+            var time = new Date(); 
+            var update = { x: [[time]], y: [[rand()]] }; 
+            var olderTime = time.setMinutes(time.getMinutes() - 3);
+            var futureTime = time.setMinutes(time.getMinutes() + 3);
+            var minuteView = { xaxis: { type: 'date', range: [olderTime, futureTime] } }; // 동기와 다르게 비동기로 처리되는 부분. 
+            console.time("forShow"); 
+            for (var i = 0; i < 31; i++) {
+                (function (i) {     // 외부 for문의 i값을 전달하기 위한 방법. 
+                    setTimeout(function () { // setTimeout()의 경우 비동기로 동작하는 방식이라 showChart()를 비동기로 수행하게 함. 
+                        showChart('g'+(i+1),update, minuteView) 
+                    }, 10); 
+                }(i)); 
+            } 
+            console.timeEnd("forShow"); }, 1000); 
+    </script> 
+</body>
